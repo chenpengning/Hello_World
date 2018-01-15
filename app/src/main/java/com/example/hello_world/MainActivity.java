@@ -1,9 +1,18 @@
 package com.example.hello_world;
 
 
+import android.app.Service;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import rx.Observable;
@@ -14,16 +23,30 @@ import rx.Subscriber;
 public class MainActivity extends AppCompatActivity {
 
     private  int a = 0 ;
-    private String name ="liudehua";
+    private String myName ="liudehua";
 
+    public TextView t1 ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        TextView tv = (TextView) findViewById(R.id.tv);
+        tv.setText(myName.toString());
+        //开始绑定服务测试
+        Button button = (Button)findViewById(R.id.sTextbt);
+        if (button != null) {
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(MainActivity.this,BinderTextActivity.class);
+                    startActivity(intent);
+                }
+            });
+        }
 
     }
+
 
 
     @Override
@@ -55,6 +78,9 @@ public class MainActivity extends AppCompatActivity {
                 //发生错误调用
                 Log.d("rx"," -------onError!");
                 Toast.makeText(MainActivity.this," -------onError!",Toast.LENGTH_LONG ).show();
+
+                Log.d("", "");
+
             }
 
             @Override
@@ -70,34 +96,4 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    /*public void tx_Rxjava(){
-
-
-
-        Observer<String> observer = new Observer<String>() {
-            @Override
-            public void onNext(String s) {
-                Log.d("rxjava", "onNext!");
-            }
-
-            @Override
-            public void onCompleted() {
-                Log.d("rxjava", "Completed!");
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Log.d("rxjava", "Error!");
-            }
-        };
-
-        Observable observable = Observable.create(new Observable.OnSubscribe<String>() {
-            @Override
-            public void call(Subscriber<? super String> subscriber) {
-                subscriber.onNext("Hello");
-                subscriber.onCompleted();
-            }
-        });
-        observable.subscribe(observer);
-    }*/
 }
